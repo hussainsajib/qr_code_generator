@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>QR Hub – Free QR Code Generator</title>
+  <meta name="description" content="Free online QR code generator. Create custom QR codes for any URL instantly — no signup, no watermark, no limits." />
+  <meta name="keywords" content="QR code generator, free QR code, create QR code, QR code maker, online QR generator" />
+  <link rel="canonical" href="https://qrhub.tech" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://qrhub.tech" />
+  <meta property="og:title" content="QR Hub – Free QR Code Generator" />
+  <meta property="og:description" content="Generate QR codes for any URL instantly. Free, no signup, no watermark." />
+  <meta property="og:image" content="https://qrhub.tech/og-image.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="QR Hub – Free QR Code Generator" />
+  <meta name="twitter:description" content="Generate QR codes for any URL instantly. Free, no signup, no watermark." />
+  <meta name="twitter:image" content="https://qrhub.tech/og-image.png" />
+
+  <!-- Schema.org structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "QR Hub",
+    "url": "https://qrhub.tech",
+    "description": "Free online QR code generator. Create custom QR codes for any URL instantly.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <!-- Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID once approved -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: #f5f5f5;
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── top ad banner ── */
+    .ad-banner {
+      width: 100%;
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: .6rem 1rem;
+      min-height: 100px;
+    }
+    .ad-placeholder {
+      width: 728px;
+      max-width: 100%;
+      height: 90px;
+      background: #f3f4f6;
+      border: 1.5px dashed #d1d5db;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      font-size: .8rem;
+    }
+
+    /* ── main layout ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── sidebar ad ── */
+    .ad-sidebar {
+      width: 160px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding-top: .25rem;
+    }
+    .ad-sidebar .ad-placeholder {
+      width: 160px;
+      height: 600px;
+    }
+
+    /* ── card ── */
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.08);
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .card h1 { font-size: 1.4rem; font-weight: 600; color: #111; }
+    label { font-size: .85rem; font-weight: 500; color: #374151; }
+
+    input[type="url"] {
+      width: 100%;
+      padding: .65rem .85rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color .15s;
+    }
+    input[type="url"]:focus { border-color: #6366f1; }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+    }
+    .option-group { display: flex; flex-direction: column; gap: .3rem; }
+    .option-group input[type="range"] { width: 100%; accent-color: #6366f1; }
+    .range-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+    }
+    .range-row span {
+      font-size: .85rem;
+      font-weight: 600;
+      color: #6366f1;
+      min-width: 1.5rem;
+      text-align: right;
+    }
+
+    .preview-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .6rem;
+      border: 1.5px dashed #d1d5db;
+      border-radius: 10px;
+      padding: 1.25rem;
+      min-height: 200px;
+      justify-content: center;
+      transition: border-color .2s;
+      position: relative;
+    }
+    .preview-box.has-image { border-style: solid; border-color: #e5e7eb; }
+    .preview-box .placeholder { color: #9ca3af; font-size: .9rem; text-align: center; }
+    .preview-box img {
+      width: 200px;
+      height: 200px;
+      border-radius: 6px;
+      transition: opacity .2s;
+    }
+    .preview-box img.loading { opacity: .35; }
+    .spinner {
+      display: none;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 28px; height: 28px;
+      border: 3px solid #e0e7ff;
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    .preview-box.loading .spinner { display: block; }
+    @keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+    .actions { display: flex; gap: .75rem; }
+    button {
+      flex: 1;
+      padding: .65rem;
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    button:hover { background: #4f46e5; }
+    button:disabled { background: #a5b4fc; cursor: not-allowed; }
+
+    #download-btn {
+      display: none;
+      flex: 1;
+      padding: .65rem;
+      background: #f0fdf4;
+      color: #16a34a;
+      border: 1.5px solid #86efac;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    #download-btn:hover { background: #dcfce7; }
+    #error { color: #dc2626; font-size: .9rem; display: none; }
+
+    /* ── how-to section ── */
+    .how-to {
+      width: 100%;
+      max-width: 860px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.06);
+      padding: 2rem;
+      margin: 0 auto;
+    }
+    .how-to h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 1.25rem;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .step {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .step-num {
+      width: 28px; height: 28px;
+      background: #6366f1;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .8rem;
+      font-weight: 700;
+      margin-bottom: .6rem;
+    }
+    .step h3 { font-size: .9rem; font-weight: 600; color: #111; margin-bottom: .3rem; }
+    .step p { font-size: .85rem; color: #6b7280; line-height: 1.5; }
+
+    /* ── inline ad (below tool) ── */
+    .ad-inline {
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+    }
+    .ad-inline .ad-placeholder { width: 728px; height: 90px; }
+
+    /* ── FAQ ── */
+    .faq {
+      width: 100%;
+      max-width: 860px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.06);
+      padding: 2rem;
+      margin: 0 auto;
+    }
+    .faq h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 1.25rem;
+    }
+    .faq-item { border-top: 1px solid #f3f4f6; padding: 1rem 0; }
+    .faq-item:last-child { border-bottom: 1px solid #f3f4f6; }
+    .faq-item h3 { font-size: .95rem; font-weight: 600; color: #111; margin-bottom: .4rem; }
+    .faq-item p { font-size: .88rem; color: #6b7280; line-height: 1.6; }
+
+    /* ── footer ── */
+    footer {
+      background: #fff;
+      border-top: 1px solid #e5e7eb;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      font-size: .85rem;
+      color: #6b7280;
+      flex-wrap: wrap;
+    }
+    footer a { color: #6366f1; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── content wrapper (below the tool row) ── */
+    .content-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 1rem 2rem;
+    }
+
+    @media (max-width: 680px) {
+      .ad-sidebar { display: none; }
+      .ad-placeholder { width: 320px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top leaderboard ad -->
+  <div class="ad-banner">
+    <!-- Replace this div with your AdSense leaderboard ad unit once approved -->
+    <div class="ad-placeholder">Advertisement · 728×90</div>
+  </div>
+
+  <main>
+    <!-- Sidebar ad (desktop only) -->
+    <aside class="ad-sidebar">
+      <!-- Replace with AdSense 160×600 skyscraper ad unit -->
+      <div class="ad-placeholder" style="height:600px">Ad · 160×600</div>
+    </aside>
+
+    <!-- QR Generator card -->
+    <div class="card">
+      <h1>QR Code Generator</h1>
+
+      <div>
+        <label for="url">URL</label>
+        <input id="url" type="url" placeholder="https://example.com" autocomplete="off" style="margin-top:.3rem" />
+      </div>
+
+      <div class="options">
+        <div class="option-group">
+          <label for="size">Box size</label>
+          <div class="range-row">
+            <input id="size" type="range" min="4" max="30" value="10" oninput="onSlider('size-val',this.value)" />
+            <span id="size-val">10</span>
+          </div>
+        </div>
+        <div class="option-group">
+          <label for="border">Border</label>
+          <div class="range-row">
+            <input id="border" type="range" min="0" max="10" value="4" oninput="onSlider('border-val',this.value)" />
+            <span id="border-val">4</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="preview-box" class="preview-box">
+        <p class="placeholder" id="placeholder">Enter a URL to see a preview</p>
+        <img id="qr" src="" alt="Generated QR code" style="display:none" />
+        <div class="spinner"></div>
+      </div>
+
+      <p id="error"></p>
+
+      <div class="actions">
+        <button id="btn" onclick="generate()">Generate</button>
+        <a id="download-btn" download="qrcode.png">Download PNG</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Content below the tool (full width) -->
+  <div class="content-section">
+
+    <!-- How to use -->
+    <section class="how-to">
+      <h2>How to Create a QR Code</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Paste your URL</h3>
+          <p>Enter any website address into the URL field above.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Adjust settings</h3>
+          <p>Use the sliders to control box size and border width to suit your use case.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Preview instantly</h3>
+          <p>Your QR code generates in real time as you type — no button press needed.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h3>Download PNG</h3>
+          <p>Click Download PNG to save a high-quality image ready for print or digital use.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Inline ad between sections -->
+    <div class="ad-inline">
+      <!-- Replace with AdSense 728×90 ad unit -->
+      <div class="ad-placeholder">Advertisement · 728×90</div>
+    </div>
+
+    <!-- FAQ -->
+    <section class="faq">
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="faq-item">
+        <h3>Is QR Hub free to use?</h3>
+        <p>Yes, completely free. No account required, no watermarks, no download limits.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What size should my QR code be for print?</h3>
+        <p>For business cards, a minimum of 2 cm × 2 cm (around 0.8 inches) is recommended. For posters or signage viewed from a distance, scale up proportionally — a QR code viewed from 3 metres should be at least 9 cm × 9 cm.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What is box size?</h3>
+        <p>Each QR code is made up of small square modules. Box size controls how many pixels wide each module is. A higher value produces a larger, higher-resolution image — useful for print. A lower value produces a smaller file suitable for web.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What is the border setting?</h3>
+        <p>The border (also called the quiet zone) is the blank white space around the QR code. QR code standards recommend a border of at least 4 modules. Reducing it below 4 may cause some scanners to fail, especially when the code is placed directly on a coloured background.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do QR codes expire?</h3>
+        <p>QR codes generated here are static — they encode the URL directly and never expire. As long as the destination URL remains active, the QR code will work indefinitely.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I use these QR codes commercially?</h3>
+        <p>Yes. There are no restrictions on how you use the generated QR codes.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <span>© 2026 QR Hub</span>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/terms.html">Terms of Service</a>
+  </footer>
+
+  <script>
+    const API_URL = 'https://YOUR_CLOUD_FUNCTION_URL/generate';
+
+    let debounceTimer = null;
+    let currentObjectUrl = null;
+
+    function onSlider(valId, val) {
+      document.getElementById(valId).textContent = val;
+      schedulePreview();
+    }
+
+    function schedulePreview() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(preview, 500);
+    }
+
+    async function preview() {
+      const url = document.getElementById('url').value.trim();
+      if (!url) { clearPreview(); return; }
+      await fetchQR(url, true);
+    }
+
+    async function generate() {
+      const url = document.getElementById('url').value.trim();
+      if (!url) { showError('Please enter a URL.'); return; }
+      await fetchQR(url, false);
+    }
+
+    async function fetchQR(url, isPreview) {
+      const btn   = document.getElementById('btn');
+      const box   = document.getElementById('preview-box');
+      const qrImg = document.getElementById('qr');
+      const errEl = document.getElementById('error');
+      const dlBtn = document.getElementById('download-btn');
+      const ph    = document.getElementById('placeholder');
+
+      errEl.style.display = 'none';
+      const size   = parseInt(document.getElementById('size').value, 10);
+      const border = parseInt(document.getElementById('border').value, 10);
+
+      box.classList.add('loading');
+      if (qrImg.src) qrImg.classList.add('loading');
+      if (!isPreview) { btn.disabled = true; btn.textContent = 'Generating…'; }
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url, size, border }),
+        });
+        if (!res.ok) throw new Error(await res.text() || res.statusText);
+
+        const blob = await res.blob();
+        if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+        currentObjectUrl = URL.createObjectURL(blob);
+
+        qrImg.src = currentObjectUrl;
+        qrImg.style.display = 'block';
+        qrImg.classList.remove('loading');
+        ph.style.display = 'none';
+        box.classList.add('has-image');
+        dlBtn.href = currentObjectUrl;
+        dlBtn.style.display = 'block';
+      } catch (e) {
+        showError(e.message);
+      } finally {
+        box.classList.remove('loading');
+        if (!isPreview) { btn.disabled = false; btn.textContent = 'Generate'; }
+      }
+    }
+
+    function clearPreview() {
+      const qrImg = document.getElementById('qr');
+      const box   = document.getElementById('preview-box');
+      const ph    = document.getElementById('placeholder');
+      const dl    = document.getElementById('download-btn');
+      qrImg.src = '';
+      qrImg.style.display = 'none';
+      ph.style.display = 'block';
+      box.classList.remove('has-image');
+      dl.style.display = 'none';
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('error');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    document.getElementById('url').addEventListener('input', schedulePreview);
+    document.getElementById('url').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { clearTimeout(debounceTimer); generate(); }
+    });
+  </script>
+</body>
+</html>

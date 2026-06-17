@@ -1,0 +1,64 @@
+name: Deploy
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  # ── Deploy frontend/ to Vercel ─────────────────────────────────────────────
+  deploy-frontend:
+    name: Frontend → Vercel
+    runs-on: ubuntu-latest
+    if: |
+      contains(toJSON(github.event.commits.*.modified), 'frontend/') ||
+      contains(toJSON(github.event.commits.*.added), 'frontend/')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel project settings
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: frontend
+
+      - name: Build project
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: frontend
+
+      - name: Deploy to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: frontend
+
+  # ── Deploy api/ to Google Cloud Functions ─────────────────────────────────
+  deploy-api:
+    name: API → Cloud Functions
+    runs-on: ubuntu-latest
+    if: |
+      contains(toJSON(github.event.commits.*.modified), 'api/') ||
+      contains(toJSON(github.event.commits.*.added), 'api/')
+
+    permissions:
+      contents: read
+      id-token: write   # required for Workload Identity Federation
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Deploy Cloud Function
+        uses: google-github-actions/deploy-cloud-functions@v3
+        with:
+          name: qr-api
+          runtime: python311
+          region: us-central1
+          source_dir: api
+          entry_point: qr_handler
+          ingress_settings: ALLOW_ALL
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
