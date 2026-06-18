@@ -4,7 +4,7 @@ import functions_framework
 import qrcode
 from qrcode.image.pil import PilImage
 
-ALLOWED_ORIGINS = {"https://qrhub.tech", "https://www.qrhub.tech"}
+ALLOWED_ORIGINS = {"https://qrhub.tech", "https://www.qrhub.tech"}  # noqa
 
 
 @functions_framework.http
