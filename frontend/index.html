@@ -32,36 +32,127 @@
     "description": "Free online QR code generator. Create QR codes for URLs, WiFi networks, contacts, SMS, email, phone numbers, and plain text.",
     "applicationCategory": "UtilityApplication",
     "operatingSystem": "Web",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
   }
   </script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3117623793524164" crossorigin="anonymous"></script>
 
   <style>
+    /* ── reset ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── base ── */
     body {
       min-height: 100vh;
-      background: #f5f5f5;
-      font-family: system-ui, sans-serif;
+      background: linear-gradient(160deg, #f5f3ff 0%, #eef2ff 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-size: 16px;
+      color: #111827;
       display: flex;
       flex-direction: column;
     }
 
-    /* ── top ad banner ── */
-    .ad-banner {
-      width: 100%;
+    /* ── skip link (accessibility) ── */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      background: #4f46e5;
+      color: #fff;
+      padding: .5rem 1rem;
+      border-radius: 0 0 8px 8px;
+      font-size: .875rem;
+      font-weight: 600;
+      text-decoration: none;
+      z-index: 200;
+      transition: top .1s;
+    }
+    .skip-link:focus { top: 0; outline: none; }
+
+    /* ── focus styles (global) ── */
+    :focus-visible {
+      outline: 2px solid #6366f1;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    /* ── site header ── */
+    .site-header {
       background: #fff;
       border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: .75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .site-logo {
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      text-decoration: none;
+      color: #111827;
+    }
+    .site-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: .6rem 1rem;
-      min-height: 100px;
+      flex-shrink: 0;
+    }
+    .site-logo-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: #111827;
+    }
+    .site-logo-text span { color: #6366f1; }
+    .site-badges {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: .72rem;
+      font-weight: 600;
+      padding: .2rem .55rem;
+      border-radius: 20px;
+      background: #f0fdf4;
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
+      letter-spacing: .01em;
+    }
+    .badge.indigo {
+      background: #eef2ff;
+      color: #4f46e5;
+      border-color: #c7d2fe;
+    }
+
+    /* ── ad banner ── */
+    .ad-banner {
+      width: 100%;
+      background: #fff;
+      border-bottom: 1px solid #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: .4rem 1rem;
     }
 
     /* ── main layout ── */
@@ -70,7 +161,7 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      padding: 2rem 1rem;
+      padding: 2.5rem 1rem 2rem;
       gap: 1.5rem;
       flex-wrap: wrap;
     }
@@ -79,64 +170,90 @@
     .ad-sidebar {
       width: 160px;
       flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
       padding-top: .25rem;
     }
 
     /* ── card ── */
     .card {
       background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 24px rgba(0,0,0,.08);
-      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 10px 40px rgba(99,102,241,.1);
+      border-top: 3px solid #6366f1;
+      padding: 1.75rem;
       width: 100%;
-      max-width: 440px;
+      max-width: 460px;
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
     }
 
-    .card h1 { font-size: 1.4rem; font-weight: 600; color: #111; }
-    label { font-size: .85rem; font-weight: 500; color: #374151; }
+    /* ── card heading ── */
+    .card-header { display: flex; flex-direction: column; gap: .25rem; }
+    .card-header h1 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #111827;
+      letter-spacing: -.025em;
+      line-height: 1.2;
+    }
+    .card-header p {
+      font-size: .82rem;
+      color: #9ca3af;
+      font-weight: 400;
+    }
+
+    /* ── divider ── */
+    .divider { height: 1px; background: #f3f4f6; margin: -.1rem 0; }
+
+    /* ── labels ── */
+    label {
+      font-size: .82rem;
+      font-weight: 600;
+      color: #374151;
+      letter-spacing: .01em;
+    }
+    .label-hint { font-weight: 400; color: #9ca3af; }
 
     /* ── type tabs ── */
     .type-tabs {
       display: flex;
       flex-wrap: wrap;
-      gap: .4rem;
-      margin-top: .4rem;
+      gap: .35rem;
+      margin-top: .45rem;
     }
     .type-tab {
-      padding: .28rem .7rem;
-      background: #fff;
-      color: #374151;
-      border: 1.5px solid #d1d5db;
+      padding: .3rem .75rem;
+      background: #f9fafb;
+      color: #6b7280;
+      border: 1.5px solid #e5e7eb;
       border-radius: 20px;
       font-size: .78rem;
-      font-weight: 500;
+      font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
       transition: all .15s;
       line-height: 1.5;
+      letter-spacing: .01em;
     }
     .type-tab.active {
       background: #6366f1;
       color: #fff;
       border-color: #6366f1;
+      box-shadow: 0 1px 4px rgba(99,102,241,.35);
     }
     .type-tab:hover:not(.active) {
-      border-color: #6366f1;
-      color: #6366f1;
+      border-color: #a5b4fc;
+      color: #4f46e5;
+      background: #eef2ff;
     }
 
     /* ── form fields ── */
     .type-fields {
       display: flex;
       flex-direction: column;
-      gap: .85rem;
+      gap: .9rem;
     }
-    .field-group { display: flex; flex-direction: column; gap: .3rem; }
+    .field-group { display: flex; flex-direction: column; gap: .35rem; }
     .field-row { display: flex; gap: .75rem; align-items: flex-end; }
     .field-row .field-group { flex: 1; }
 
@@ -145,59 +262,113 @@
     input[type="tel"],
     input[type="email"] {
       width: 100%;
-      padding: .65rem .85rem;
-      border: 1.5px solid #d1d5db;
+      padding: .6rem .85rem;
+      border: 1.5px solid #e5e7eb;
       border-radius: 8px;
-      font-size: .95rem;
+      font-size: .925rem;
       font-family: inherit;
+      color: #111827;
+      background: #fff;
       outline: none;
-      transition: border-color .15s;
+      transition: border-color .15s, box-shadow .15s;
     }
     input[type="url"]:focus,
     input[type="text"]:focus,
     input[type="tel"]:focus,
-    input[type="email"]:focus { border-color: #6366f1; }
+    input[type="email"]:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+    }
+    input::placeholder { color: #d1d5db; }
 
     textarea, select {
       width: 100%;
-      padding: .65rem .85rem;
-      border: 1.5px solid #d1d5db;
+      padding: .6rem .85rem;
+      border: 1.5px solid #e5e7eb;
       border-radius: 8px;
-      font-size: .95rem;
+      font-size: .925rem;
       font-family: inherit;
+      color: #111827;
+      background: #fff;
       outline: none;
-      transition: border-color .15s;
+      transition: border-color .15s, box-shadow .15s;
     }
     textarea { resize: vertical; }
-    textarea:focus, select:focus { border-color: #6366f1; }
-    select { cursor: pointer; background: #fff; }
+    textarea::placeholder { color: #d1d5db; }
+    textarea:focus, select:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+    }
+    select { cursor: pointer; }
 
     .checkbox-row {
       display: flex;
       align-items: center;
       gap: .45rem;
-      padding-top: .1rem;
     }
-    .checkbox-row input[type="checkbox"] { accent-color: #6366f1; width: 15px; height: 15px; cursor: pointer; }
-    .checkbox-row label { cursor: pointer; font-size: .85rem; }
+    .checkbox-row input[type="checkbox"] {
+      accent-color: #6366f1;
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .checkbox-row label { cursor: pointer; font-size: .83rem; font-weight: 400; color: #374151; }
 
-    /* ── size / border sliders ── */
+    /* ── settings panel ── */
+    .settings-panel {
+      background: #fafafa;
+      border: 1px solid #f0f0f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .settings-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .65rem 1rem;
+      cursor: pointer;
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #9ca3af;
+      list-style: none;
+      user-select: none;
+      transition: color .15s;
+    }
+    .settings-summary::-webkit-details-marker { display: none; }
+    .settings-summary:hover { color: #6b7280; }
+    .settings-chevron {
+      transition: transform .2s;
+      display: inline-flex;
+    }
+    details[open] .settings-chevron { transform: rotate(180deg); }
+    .settings-body {
+      padding: .85rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    /* ── sliders ── */
     .options {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: .75rem;
     }
-    .option-group { display: flex; flex-direction: column; gap: .3rem; }
-    .option-group input[type="range"] { width: 100%; accent-color: #6366f1; }
+    .option-group { display: flex; flex-direction: column; gap: .35rem; }
+    .option-group input[type="range"] { width: 100%; accent-color: #6366f1; cursor: pointer; }
     .range-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: .5rem;
     }
-    .range-row span {
-      font-size: .85rem;
-      font-weight: 600;
+    .range-val {
+      font-size: .82rem;
+      font-weight: 700;
       color: #6366f1;
       min-width: 1.5rem;
       text-align: right;
@@ -211,10 +382,10 @@
       margin-top: .3rem;
     }
     input[type="color"] {
-      width: 40px;
-      height: 34px;
+      width: 38px;
+      height: 32px;
       padding: 2px 3px;
-      border: 1.5px solid #d1d5db;
+      border: 1.5px solid #e5e7eb;
       border-radius: 7px;
       cursor: pointer;
       background: none;
@@ -222,11 +393,11 @@
     }
     input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
     input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
-    .color-hex { font-size: .82rem; color: #6b7280; font-family: monospace; }
+    .color-hex { font-size: .8rem; color: #9ca3af; font-family: 'SF Mono', 'Fira Code', monospace; }
 
     /* ── logo upload ── */
     .logo-upload {
-      border: 1.5px dashed #d1d5db;
+      border: 1.5px dashed #e5e7eb;
       border-radius: 8px;
       padding: .65rem 1rem;
       cursor: pointer;
@@ -234,14 +405,16 @@
       align-items: center;
       justify-content: center;
       min-height: 52px;
-      transition: border-color .15s;
-      font-size: .88rem;
+      margin-top: .35rem;
+      transition: border-color .15s, background .15s;
+      font-size: .85rem;
       color: #9ca3af;
-      margin-top: .3rem;
     }
-    .logo-upload:hover { border-color: #6366f1; color: #6366f1; }
+    .logo-upload:hover { border-color: #a5b4fc; background: #fafafe; color: #6366f1; }
+    .logo-upload:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
+    .logo-hint-inner { display: flex; align-items: center; gap: .5rem; }
     #logo-preview-wrap { display: flex; align-items: center; gap: .75rem; width: 100%; }
-    #logo-preview { width: 36px; height: 36px; object-fit: contain; border-radius: 4px; border: 1px solid #e5e7eb; }
+    #logo-preview { width: 36px; height: 36px; object-fit: contain; border-radius: 6px; border: 1px solid #e5e7eb; }
     #logo-name { font-size: .82rem; color: #374151; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .logo-remove {
       padding: .2rem .55rem;
@@ -249,41 +422,61 @@
       color: #dc2626;
       border: none;
       border-radius: 6px;
-      font-size: .8rem;
+      font-size: .78rem;
+      font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
       flex-shrink: 0;
+      transition: background .15s;
     }
     .logo-remove:hover { background: #fecaca; }
 
-    /* ── preview ── */
+    /* ── preview box ── */
     .preview-box {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: .6rem;
-      border: 1.5px dashed #d1d5db;
-      border-radius: 10px;
-      padding: 1.25rem;
-      min-height: 200px;
+      gap: .75rem;
+      border: 1.5px solid #f0f0f0;
+      border-radius: 12px;
+      padding: 1.5rem 1.25rem;
+      min-height: 220px;
       justify-content: center;
-      transition: border-color .2s;
+      background: #fafafa;
       position: relative;
+      transition: border-color .2s, background .2s;
     }
-    .preview-box.has-image { border-style: solid; border-color: #e5e7eb; }
-    .preview-box .placeholder { color: #9ca3af; font-size: .9rem; text-align: center; }
+    .preview-box.has-image {
+      background: #fff;
+      border-color: #e5e7eb;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,.03);
+    }
+    .preview-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .65rem;
+      text-align: center;
+    }
+    .preview-empty p {
+      font-size: .85rem;
+      color: #c4c9d4;
+      font-weight: 500;
+    }
     .preview-box img {
-      width: 200px;
-      height: 200px;
-      border-radius: 6px;
+      width: 210px;
+      height: 210px;
+      border-radius: 8px;
       transition: opacity .2s;
+      image-rendering: pixelated;
     }
-    .preview-box img.loading { opacity: .35; }
+    .preview-box img.loading { opacity: .3; }
     .spinner {
       display: none;
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 28px; height: 28px;
+      width: 30px; height: 30px;
       border: 3px solid #e0e7ff;
       border-top-color: #6366f1;
       border-radius: 50%;
@@ -296,123 +489,143 @@
     .actions { display: flex; gap: .75rem; }
     .actions button {
       flex: 1;
-      padding: .65rem;
-      background: #6366f1;
+      padding: .7rem;
+      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
       color: #fff;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 500;
+      border-radius: 9px;
+      font-size: .95rem;
+      font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
-      transition: background .15s;
+      transition: opacity .15s, box-shadow .15s;
+      letter-spacing: -.01em;
+      box-shadow: 0 1px 4px rgba(99,102,241,.3);
     }
-    .actions button:hover { background: #4f46e5; }
-    .actions button:disabled { background: #a5b4fc; cursor: not-allowed; }
+    .actions button:hover { opacity: .92; box-shadow: 0 3px 10px rgba(99,102,241,.35); }
+    .actions button:disabled { opacity: .55; cursor: not-allowed; box-shadow: none; }
 
     #download-btn {
       display: none;
       flex: 1;
-      padding: .65rem;
+      padding: .7rem;
       background: #f0fdf4;
-      color: #16a34a;
+      color: #15803d;
       border: 1.5px solid #86efac;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 500;
+      border-radius: 9px;
+      font-size: .95rem;
+      font-weight: 600;
+      font-family: inherit;
       text-align: center;
       text-decoration: none;
       cursor: pointer;
-      transition: background .15s;
+      transition: background .15s, border-color .15s;
+      letter-spacing: -.01em;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
     }
-    #download-btn:hover { background: #dcfce7; }
-    #error { color: #dc2626; font-size: .9rem; display: none; }
+    #download-btn:hover { background: #dcfce7; border-color: #4ade80; }
 
-    /* ── how-to section ── */
+    /* ── error ── */
+    #error {
+      display: none;
+      align-items: center;
+      gap: .4rem;
+      font-size: .875rem;
+      color: #dc2626;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: .5rem .75rem;
+    }
+
+    /* ── how-to ── */
     .how-to {
       width: 100%;
-      max-width: 860px;
+      max-width: 880px;
       background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 24px rgba(0,0,0,.06);
+      border-radius: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 4px 20px rgba(0,0,0,.04);
       padding: 2rem;
       margin: 0 auto;
     }
-    .how-to h2 {
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: #111;
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #111827;
+      letter-spacing: -.02em;
       margin-bottom: 1.25rem;
     }
     .steps {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
       gap: 1rem;
     }
     .step {
       background: #f9fafb;
-      border-radius: 8px;
-      padding: 1rem;
+      border-radius: 10px;
+      padding: 1rem 1rem 1.1rem;
+      border: 1px solid #f3f4f6;
     }
     .step-num {
       width: 28px; height: 28px;
-      background: #6366f1;
+      background: linear-gradient(135deg, #6366f1, #818cf8);
       color: #fff;
-      border-radius: 50%;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: .8rem;
+      font-size: .78rem;
       font-weight: 700;
-      margin-bottom: .6rem;
+      margin-bottom: .7rem;
+      box-shadow: 0 2px 6px rgba(99,102,241,.3);
     }
-    .step h3 { font-size: .9rem; font-weight: 600; color: #111; margin-bottom: .3rem; }
-    .step p { font-size: .85rem; color: #6b7280; line-height: 1.5; }
+    .step h3 { font-size: .875rem; font-weight: 600; color: #111827; margin-bottom: .35rem; }
+    .step p { font-size: .82rem; color: #6b7280; line-height: 1.55; }
 
     /* ── inline ad ── */
     .ad-inline {
       width: 100%;
-      max-width: 860px;
+      max-width: 880px;
       margin: 0 auto;
       display: flex;
       justify-content: center;
-      min-height: 90px;
     }
 
     /* ── FAQ ── */
     .faq {
       width: 100%;
-      max-width: 860px;
+      max-width: 880px;
       background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 24px rgba(0,0,0,.06);
+      border-radius: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 4px 20px rgba(0,0,0,.04);
       padding: 2rem;
       margin: 0 auto;
     }
-    .faq h2 {
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: #111;
-      margin-bottom: 1.25rem;
+    .faq-item {
+      border-top: 1px solid #f3f4f6;
+      padding: 1rem 0;
+      transition: background .1s;
     }
-    .faq-item { border-top: 1px solid #f3f4f6; padding: 1rem 0; }
     .faq-item:last-child { border-bottom: 1px solid #f3f4f6; }
-    .faq-item h3 { font-size: .95rem; font-weight: 600; color: #111; margin-bottom: .4rem; }
-    .faq-item p { font-size: .88rem; color: #6b7280; line-height: 1.6; }
+    .faq-item h3 { font-size: .9rem; font-weight: 600; color: #111827; margin-bottom: .4rem; }
+    .faq-item p { font-size: .855rem; color: #6b7280; line-height: 1.65; }
 
     /* ── footer ── */
     footer {
       background: #fff;
-      border-top: 1px solid #e5e7eb;
-      padding: 1rem 2rem;
+      border-top: 1px solid #f3f4f6;
+      padding: 1.1rem 2rem;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 1.5rem;
-      font-size: .85rem;
-      color: #6b7280;
+      font-size: .82rem;
+      color: #9ca3af;
       flex-wrap: wrap;
     }
-    footer a { color: #6366f1; text-decoration: none; }
+    footer a { color: #6366f1; text-decoration: none; font-weight: 500; }
     footer a:hover { text-decoration: underline; }
 
     /* ── content wrapper ── */
@@ -422,38 +635,81 @@
       flex-direction: column;
       align-items: center;
       gap: 1.5rem;
-      padding: 0 1rem 2rem;
+      padding: 0 1rem 3rem;
     }
 
+    /* ── mobile ── */
     @media (max-width: 680px) {
       .ad-sidebar { display: none; }
+      main { padding: 1.5rem 1rem; }
+      .site-badges .badge:not(:first-child) { display: none; }
+    }
+    @media (max-width: 480px) {
+      .card { padding: 1.35rem; border-radius: 14px; }
+      .card-header h1 { font-size: 1.25rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top leaderboard ad (Auto ads — no ins tag needed) -->
-  <div class="ad-banner"></div>
+  <a href="#main-card" class="skip-link">Skip to main content</a>
+
+  <!-- Site header -->
+  <header class="site-header" role="banner">
+    <div class="site-header-inner">
+      <a href="/" class="site-logo" aria-label="QR Hub — go to homepage">
+        <div class="site-logo-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <rect x="1" y="1" width="6" height="6" rx="1" fill="white"/>
+            <rect x="2.25" y="2.25" width="3.5" height="3.5" rx=".4" fill="#6366f1"/>
+            <rect x="11" y="1" width="6" height="6" rx="1" fill="white"/>
+            <rect x="12.25" y="2.25" width="3.5" height="3.5" rx=".4" fill="#6366f1"/>
+            <rect x="1" y="11" width="6" height="6" rx="1" fill="white"/>
+            <rect x="2.25" y="12.25" width="3.5" height="3.5" rx=".4" fill="#6366f1"/>
+            <rect x="11" y="11" width="2.5" height="2.5" rx=".4" fill="white"/>
+            <rect x="14.5" y="11" width="2.5" height="2.5" rx=".4" fill="white"/>
+            <rect x="11" y="14.5" width="2.5" height="2.5" rx=".4" fill="white"/>
+            <rect x="14.5" y="14.5" width="2.5" height="2.5" rx=".4" fill="white"/>
+          </svg>
+        </div>
+        <span class="site-logo-text">QR<span>Hub</span></span>
+      </a>
+      <div class="site-badges" aria-label="Features">
+        <span class="badge">Free forever</span>
+        <span class="badge indigo">No signup</span>
+        <span class="badge indigo">No watermark</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Top ad (Auto ads) -->
+  <div class="ad-banner" aria-hidden="true"></div>
 
   <main>
     <!-- Sidebar ad (desktop only — Auto ads) -->
-    <aside class="ad-sidebar"></aside>
+    <aside class="ad-sidebar" aria-hidden="true"></aside>
 
     <!-- QR Generator card -->
-    <div class="card">
-      <h1>QR Code Generator</h1>
+    <div class="card" id="main-card">
+
+      <div class="card-header">
+        <h1>QR Code Generator</h1>
+        <p>7 types · custom colors · logo overlay · instant preview</p>
+      </div>
+
+      <div class="divider" role="separator"></div>
 
       <!-- QR type selector -->
       <div>
-        <label>QR Type</label>
-        <div class="type-tabs" role="tablist">
-          <button class="type-tab active" data-type="url"   onclick="switchType('url')"   role="tab">URL</button>
-          <button class="type-tab"        data-type="wifi"  onclick="switchType('wifi')"  role="tab">WiFi</button>
-          <button class="type-tab"        data-type="vcard" onclick="switchType('vcard')" role="tab">vCard</button>
-          <button class="type-tab"        data-type="sms"   onclick="switchType('sms')"   role="tab">SMS</button>
-          <button class="type-tab"        data-type="email" onclick="switchType('email')" role="tab">Email</button>
-          <button class="type-tab"        data-type="text"  onclick="switchType('text')"  role="tab">Text</button>
-          <button class="type-tab"        data-type="phone" onclick="switchType('phone')" role="tab">Phone</button>
+        <label id="qr-type-label">QR Type</label>
+        <div class="type-tabs" role="tablist" aria-labelledby="qr-type-label">
+          <button class="type-tab active" id="tab-url"   data-type="url"   role="tab" aria-selected="true"  aria-controls="fields-url"   onclick="switchType('url')"  >URL</button>
+          <button class="type-tab"        id="tab-wifi"  data-type="wifi"  role="tab" aria-selected="false" aria-controls="fields-wifi"  onclick="switchType('wifi')" >WiFi</button>
+          <button class="type-tab"        id="tab-vcard" data-type="vcard" role="tab" aria-selected="false" aria-controls="fields-vcard" onclick="switchType('vcard')">vCard</button>
+          <button class="type-tab"        id="tab-sms"   data-type="sms"   role="tab" aria-selected="false" aria-controls="fields-sms"   onclick="switchType('sms')"  >SMS</button>
+          <button class="type-tab"        id="tab-email" data-type="email" role="tab" aria-selected="false" aria-controls="fields-email" onclick="switchType('email')">Email</button>
+          <button class="type-tab"        id="tab-text"  data-type="text"  role="tab" aria-selected="false" aria-controls="fields-text"  onclick="switchType('text')" >Text</button>
+          <button class="type-tab"        id="tab-phone" data-type="phone" role="tab" aria-selected="false" aria-controls="fields-phone" onclick="switchType('phone')">Phone</button>
         </div>
       </div>
 
@@ -461,7 +717,7 @@
       <div id="form-fields">
 
         <!-- URL -->
-        <div id="fields-url" class="type-fields">
+        <div id="fields-url" class="type-fields" role="tabpanel" aria-labelledby="tab-url" aria-hidden="false">
           <div class="field-group">
             <label for="f-url">URL</label>
             <input id="f-url" type="url" placeholder="https://example.com" autocomplete="off" />
@@ -469,7 +725,7 @@
         </div>
 
         <!-- WiFi -->
-        <div id="fields-wifi" class="type-fields" style="display:none">
+        <div id="fields-wifi" class="type-fields" role="tabpanel" aria-labelledby="tab-wifi" aria-hidden="true" style="display:none">
           <div class="field-group">
             <label for="f-ssid">Network name (SSID)</label>
             <input id="f-ssid" type="text" placeholder="MyWiFiNetwork" autocomplete="off" />
@@ -495,10 +751,10 @@
         </div>
 
         <!-- vCard -->
-        <div id="fields-vcard" class="type-fields" style="display:none">
+        <div id="fields-vcard" class="type-fields" role="tabpanel" aria-labelledby="tab-vcard" aria-hidden="true" style="display:none">
           <div class="field-group">
-            <label for="f-vcard-name">Full name <span style="color:#dc2626">*</span></label>
-            <input id="f-vcard-name" type="text" placeholder="Jane Smith" autocomplete="off" />
+            <label for="f-vcard-name">Full name <span aria-hidden="true" style="color:#ef4444">*</span><span class="sr-only">(required)</span></label>
+            <input id="f-vcard-name" type="text" placeholder="Jane Smith" autocomplete="off" aria-required="true" />
           </div>
           <div class="field-group">
             <label for="f-vcard-phone">Phone</label>
@@ -519,35 +775,35 @@
         </div>
 
         <!-- SMS -->
-        <div id="fields-sms" class="type-fields" style="display:none">
+        <div id="fields-sms" class="type-fields" role="tabpanel" aria-labelledby="tab-sms" aria-hidden="true" style="display:none">
           <div class="field-group">
-            <label for="f-sms-phone">Phone number <span style="color:#dc2626">*</span></label>
-            <input id="f-sms-phone" type="tel" placeholder="+1 555 000 0000" autocomplete="off" />
+            <label for="f-sms-phone">Phone number <span aria-hidden="true" style="color:#ef4444">*</span><span class="sr-only">(required)</span></label>
+            <input id="f-sms-phone" type="tel" placeholder="+1 555 000 0000" autocomplete="off" aria-required="true" />
           </div>
           <div class="field-group">
-            <label for="f-sms-msg">Message <span style="color:#9ca3af;font-weight:400">(optional)</span></label>
+            <label for="f-sms-msg">Message <span class="label-hint">(optional)</span></label>
             <textarea id="f-sms-msg" placeholder="Pre-filled message text…" rows="3"></textarea>
           </div>
         </div>
 
         <!-- Email -->
-        <div id="fields-email" class="type-fields" style="display:none">
+        <div id="fields-email" class="type-fields" role="tabpanel" aria-labelledby="tab-email" aria-hidden="true" style="display:none">
           <div class="field-group">
-            <label for="f-email-addr">Email address <span style="color:#dc2626">*</span></label>
-            <input id="f-email-addr" type="email" placeholder="contact@example.com" autocomplete="off" />
+            <label for="f-email-addr">Email address <span aria-hidden="true" style="color:#ef4444">*</span><span class="sr-only">(required)</span></label>
+            <input id="f-email-addr" type="email" placeholder="contact@example.com" autocomplete="off" aria-required="true" />
           </div>
           <div class="field-group">
-            <label for="f-email-subj">Subject <span style="color:#9ca3af;font-weight:400">(optional)</span></label>
+            <label for="f-email-subj">Subject <span class="label-hint">(optional)</span></label>
             <input id="f-email-subj" type="text" placeholder="Hello!" autocomplete="off" />
           </div>
           <div class="field-group">
-            <label for="f-email-body">Body <span style="color:#9ca3af;font-weight:400">(optional)</span></label>
+            <label for="f-email-body">Body <span class="label-hint">(optional)</span></label>
             <textarea id="f-email-body" placeholder="Message body…" rows="3"></textarea>
           </div>
         </div>
 
         <!-- Text -->
-        <div id="fields-text" class="type-fields" style="display:none">
+        <div id="fields-text" class="type-fields" role="tabpanel" aria-labelledby="tab-text" aria-hidden="true" style="display:none">
           <div class="field-group">
             <label for="f-text">Plain text</label>
             <textarea id="f-text" placeholder="Enter any text to encode…" rows="4"></textarea>
@@ -555,7 +811,7 @@
         </div>
 
         <!-- Phone -->
-        <div id="fields-phone" class="type-fields" style="display:none">
+        <div id="fields-phone" class="type-fields" role="tabpanel" aria-labelledby="tab-phone" aria-hidden="true" style="display:none">
           <div class="field-group">
             <label for="f-phone-num">Phone number</label>
             <input id="f-phone-num" type="tel" placeholder="+1 555 000 0000" autocomplete="off" />
@@ -564,107 +820,171 @@
 
       </div><!-- /form-fields -->
 
-      <!-- Size / border sliders -->
-      <div class="options">
-        <div class="option-group">
-          <label for="size">Box size</label>
-          <div class="range-row">
-            <input id="size" type="range" min="4" max="30" value="10" oninput="onSlider('size-val',this.value)" />
-            <span id="size-val">10</span>
-          </div>
-        </div>
-        <div class="option-group">
-          <label for="border">Border</label>
-          <div class="range-row">
-            <input id="border" type="range" min="0" max="10" value="4" oninput="onSlider('border-val',this.value)" />
-            <span id="border-val">4</span>
-          </div>
-        </div>
-      </div>
+      <!-- Customize settings panel -->
+      <details class="settings-panel" open>
+        <summary class="settings-summary">
+          Customize
+          <span class="settings-chevron" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M3 5l4 4 4-4"/>
+            </svg>
+          </span>
+        </summary>
+        <div class="settings-body">
 
-      <!-- Colors -->
-      <div class="options">
-        <div class="option-group">
-          <label for="fg-color">QR color</label>
-          <div class="color-row">
-            <input type="color" id="fg-color" value="#000000" oninput="onColorChange('fg-hex', this.value)" />
-            <span id="fg-hex" class="color-hex">#000000</span>
+          <!-- Size / border sliders -->
+          <div class="options">
+            <div class="option-group">
+              <label for="size">Box size</label>
+              <div class="range-row">
+                <input id="size" type="range" min="4" max="30" value="10"
+                  aria-valuemin="4" aria-valuemax="30" aria-valuenow="10"
+                  oninput="onSlider('size-val', this)" />
+                <span id="size-val" class="range-val" aria-live="polite">10</span>
+              </div>
+            </div>
+            <div class="option-group">
+              <label for="border">Border</label>
+              <div class="range-row">
+                <input id="border" type="range" min="0" max="10" value="4"
+                  aria-valuemin="0" aria-valuemax="10" aria-valuenow="4"
+                  oninput="onSlider('border-val', this)" />
+                <span id="border-val" class="range-val" aria-live="polite">4</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="option-group">
-          <label for="bg-color">Background</label>
-          <div class="color-row">
-            <input type="color" id="bg-color" value="#ffffff" oninput="onColorChange('bg-hex', this.value)" />
-            <span id="bg-hex" class="color-hex">#ffffff</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- Logo -->
-      <div>
-        <label>Logo <span style="color:#9ca3af;font-weight:400">(optional · max 512 KB)</span></label>
-        <div class="logo-upload" id="logo-drop" onclick="document.getElementById('logo-upload').click()">
-          <input type="file" id="logo-upload" accept="image/*" style="display:none" onchange="onLogoChange(this)" />
-          <span id="logo-hint">Click to upload a logo</span>
-          <div id="logo-preview-wrap" style="display:none">
-            <img id="logo-preview" alt="Logo preview" />
-            <span id="logo-name"></span>
-            <button type="button" class="logo-remove" onclick="removeLogo(event)">✕ Remove</button>
+          <!-- Colors -->
+          <div class="options">
+            <div class="option-group">
+              <label for="fg-color">QR color</label>
+              <div class="color-row">
+                <input type="color" id="fg-color" value="#000000"
+                  aria-label="QR code foreground color"
+                  oninput="onColorChange('fg-hex', this.value)" />
+                <span id="fg-hex" class="color-hex" aria-live="polite">#000000</span>
+              </div>
+            </div>
+            <div class="option-group">
+              <label for="bg-color">Background</label>
+              <div class="color-row">
+                <input type="color" id="bg-color" value="#ffffff"
+                  aria-label="QR code background color"
+                  oninput="onColorChange('bg-hex', this.value)" />
+                <span id="bg-hex" class="color-hex" aria-live="polite">#ffffff</span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div id="preview-box" class="preview-box">
-        <p class="placeholder" id="placeholder">Fill in the fields above to see a preview</p>
+          <!-- Logo -->
+          <div>
+            <label>Logo <span class="label-hint">(optional · max 512 KB)</span></label>
+            <div class="logo-upload" id="logo-drop"
+                 role="button" tabindex="0"
+                 aria-label="Upload logo image — click to browse files"
+                 onclick="document.getElementById('logo-upload').click()"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('logo-upload').click()}">
+              <input type="file" id="logo-upload" accept="image/*"
+                     style="display:none" aria-hidden="true"
+                     onchange="onLogoChange(this)" />
+              <span id="logo-hint" class="logo-hint-inner">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <path d="M8 2v8M5 5l3-3 3 3" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M2 11v1.5A1.5 1.5 0 003.5 14h9a1.5 1.5 0 001.5-1.5V11" stroke-linecap="round"/>
+                </svg>
+                Click to upload a logo
+              </span>
+              <div id="logo-preview-wrap" style="display:none">
+                <img id="logo-preview" alt="Logo preview" />
+                <span id="logo-name"></span>
+                <button type="button" class="logo-remove" onclick="removeLogo(event)" aria-label="Remove logo">✕ Remove</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </details>
+
+      <!-- Preview -->
+      <div id="preview-box" class="preview-box" role="img" aria-label="QR code preview" aria-live="polite">
+        <div class="preview-empty" id="placeholder">
+          <svg width="72" height="72" viewBox="0 0 72 72" fill="none" aria-hidden="true">
+            <rect x="4" y="4" width="26" height="26" rx="4" stroke="#e5e7eb" stroke-width="2"/>
+            <rect x="9" y="9" width="16" height="16" rx="2" fill="#f3f4f6"/>
+            <rect x="42" y="4" width="26" height="26" rx="4" stroke="#e5e7eb" stroke-width="2"/>
+            <rect x="47" y="9" width="16" height="16" rx="2" fill="#f3f4f6"/>
+            <rect x="4" y="42" width="26" height="26" rx="4" stroke="#e5e7eb" stroke-width="2"/>
+            <rect x="9" y="47" width="16" height="16" rx="2" fill="#f3f4f6"/>
+            <rect x="42" y="42" width="11" height="11" rx="2" fill="#f3f4f6"/>
+            <rect x="59" y="42" width="11" height="11" rx="2" fill="#f3f4f6"/>
+            <rect x="42" y="59" width="11" height="11" rx="2" fill="#f3f4f6"/>
+            <rect x="59" y="59" width="11" height="11" rx="2" fill="#f3f4f6"/>
+          </svg>
+          <p>Your QR code will appear here</p>
+        </div>
         <img id="qr" src="" alt="Generated QR code" style="display:none" />
-        <div class="spinner"></div>
+        <div class="spinner" role="status" aria-label="Generating QR code…"></div>
       </div>
 
-      <p id="error"></p>
+      <!-- Error -->
+      <div id="error" role="alert" aria-live="assertive" aria-atomic="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" style="flex-shrink:0">
+          <circle cx="7" cy="7" r="6" stroke="#dc2626" stroke-width="1.5"/>
+          <path d="M7 4v3.5M7 9.5v.5" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span id="error-text"></span>
+      </div>
 
+      <!-- Actions -->
       <div class="actions">
-        <button id="btn" onclick="generate()">Generate</button>
-        <a id="download-btn" download="qrcode.png">Download PNG</a>
+        <button id="btn" onclick="generate()" aria-label="Generate QR code">Generate</button>
+        <a id="download-btn" download="qrcode.png" aria-label="Download QR code as PNG">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 1v8M4 6l3 3 3-3M2 11h10"/>
+          </svg>
+          Download PNG
+        </a>
       </div>
-    </div>
+
+    </div><!-- /card -->
   </main>
 
-  <!-- Content below the tool (full width) -->
+  <!-- Content below the tool -->
   <div class="content-section">
 
     <!-- How to use -->
-    <section class="how-to">
-      <h2>How to Create a QR Code</h2>
+    <section class="how-to" aria-labelledby="howto-heading">
+      <h2 class="section-title" id="howto-heading">How to Create a QR Code</h2>
       <div class="steps">
         <div class="step">
-          <div class="step-num">1</div>
+          <div class="step-num" aria-hidden="true">1</div>
           <h3>Choose a type</h3>
-          <p>Select the QR code type — URL, WiFi, vCard, SMS, Email, Text, or Phone.</p>
+          <p>Select from 7 types — URL, WiFi, vCard, SMS, Email, Text, or Phone.</p>
         </div>
         <div class="step">
-          <div class="step-num">2</div>
+          <div class="step-num" aria-hidden="true">2</div>
           <h3>Fill in the fields</h3>
-          <p>Enter the relevant details. A live preview generates automatically as you type.</p>
+          <p>Enter the details. A live preview appears automatically as you type.</p>
         </div>
         <div class="step">
-          <div class="step-num">3</div>
-          <h3>Adjust settings</h3>
-          <p>Use the sliders to control box size and border width to suit your use case.</p>
+          <div class="step-num" aria-hidden="true">3</div>
+          <h3>Customize</h3>
+          <p>Adjust size, border, colors, and add your logo from the Customize panel.</p>
         </div>
         <div class="step">
-          <div class="step-num">4</div>
+          <div class="step-num" aria-hidden="true">4</div>
           <h3>Download PNG</h3>
-          <p>Click Download PNG to save a high-quality image ready for print or digital use.</p>
+          <p>Save a high-resolution image ready for print, digital, or sharing.</p>
         </div>
       </div>
     </section>
 
-    <!-- Inline ad between sections (Auto ads) -->
-    <div class="ad-inline"></div>
+    <!-- Inline ad (Auto ads) -->
+    <div class="ad-inline" aria-hidden="true"></div>
 
     <!-- FAQ -->
-    <section class="faq">
-      <h2>Frequently Asked Questions</h2>
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 class="section-title" id="faq-heading">Frequently Asked Questions</h2>
 
       <div class="faq-item">
         <h3>Is QR Hub free to use?</h3>
@@ -676,23 +996,23 @@
       </div>
       <div class="faq-item">
         <h3>How do I create a WiFi QR code?</h3>
-        <p>Select the WiFi type, enter your network name (SSID) and password, choose the security type (WPA/WPA2 is most common), and generate. Anyone who scans the code will be prompted to join the network automatically — no typing required.</p>
+        <p>Select the WiFi type, enter your network name (SSID) and password, choose the security type (WPA/WPA2 is most common), and generate. Anyone who scans the code will be prompted to join the network — no typing required.</p>
       </div>
       <div class="faq-item">
         <h3>What is a vCard QR code?</h3>
         <p>A vCard QR code encodes contact information (name, phone, email, organisation, website). When scanned, most phones offer to save the details directly to the address book — ideal for business cards.</p>
       </div>
       <div class="faq-item">
+        <h3>Can I add my logo to a QR code?</h3>
+        <p>Yes. Open the Customize panel, upload your logo (PNG, JPG, SVG — up to 512 KB), and it will be centered on the QR code. The error correction level is automatically increased to ensure the code remains scannable.</p>
+      </div>
+      <div class="faq-item">
         <h3>Do QR codes expire?</h3>
-        <p>QR codes generated here are static — the data is encoded directly in the image. They never expire and work indefinitely, as long as the destination (URL, phone number, etc.) remains active.</p>
+        <p>QR codes generated here are static — the data is encoded directly in the image. They never expire and work indefinitely, as long as the destination remains active.</p>
       </div>
       <div class="faq-item">
         <h3>What size should my QR code be for print?</h3>
-        <p>For business cards, a minimum of 2 cm × 2 cm (around 0.8 inches) is recommended. For posters or signage viewed from a distance, scale up proportionally — a code viewed from 3 metres should be at least 9 cm × 9 cm.</p>
-      </div>
-      <div class="faq-item">
-        <h3>What is box size?</h3>
-        <p>Each QR code is made up of small square modules. Box size controls how many pixels wide each module is. A higher value produces a larger, higher-resolution image useful for print. A lower value produces a smaller file suitable for web use.</p>
+        <p>For business cards, a minimum of 2 cm × 2 cm (0.8 in) is recommended. For signage viewed from 3 metres, use at least 9 cm × 9 cm. Increase box size in the Customize panel for higher-resolution prints.</p>
       </div>
       <div class="faq-item">
         <h3>Can I use these QR codes commercially?</h3>
@@ -702,11 +1022,14 @@
 
   </div>
 
-  <footer>
+  <footer role="contentinfo">
     <span>© 2026 QR Hub</span>
     <a href="/privacy.html">Privacy Policy</a>
     <a href="/terms.html">Terms of Service</a>
   </footer>
+
+  <!-- Screen-reader only utility -->
+  <style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}</style>
 
   <script>
     const API_URL = 'https://us-central1-home-automation-479013.cloudfunctions.net/qr-api';
@@ -722,19 +1045,24 @@
     let logoBase64 = null;
 
     function switchType(type) {
-      document.querySelectorAll('.type-tab').forEach(t =>
-        t.classList.toggle('active', t.dataset.type === type)
-      );
-      document.querySelectorAll('.type-fields').forEach(f =>
-        f.style.display = (f.id === `fields-${type}`) ? '' : 'none'
-      );
+      document.querySelectorAll('.type-tab').forEach(t => {
+        const active = t.dataset.type === type;
+        t.classList.toggle('active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      document.querySelectorAll('.type-fields').forEach(f => {
+        const active = f.id === `fields-${type}`;
+        f.style.display = active ? '' : 'none';
+        f.setAttribute('aria-hidden', active ? 'false' : 'true');
+      });
       activeType = type;
       clearPreview();
       clearError();
     }
 
-    function onSlider(valId, val) {
-      document.getElementById(valId).textContent = val;
+    function onSlider(valId, input) {
+      document.getElementById(valId).textContent = input.value;
+      input.setAttribute('aria-valuenow', input.value);
       schedulePreview();
     }
 
@@ -804,48 +1132,17 @@
       };
       if (logoBase64) base.logo = logoBase64;
 
-      if (activeType === 'url') {
-        return { ...base, url: val('f-url') };
-      }
-      if (activeType === 'wifi') {
-        return { ...base,
-          ssid:     val('f-ssid'),
-          password: val('f-password'),
-          security: document.getElementById('f-security').value,
-          hidden:   document.getElementById('f-hidden').checked,
-        };
-      }
-      if (activeType === 'vcard') {
-        return { ...base,
-          name:  val('f-vcard-name'),
-          phone: val('f-vcard-phone'),
-          email: val('f-vcard-email'),
-          org:   val('f-vcard-org'),
-          url:   val('f-vcard-url'),
-        };
-      }
-      if (activeType === 'sms') {
-        return { ...base, phone: val('f-sms-phone'), message: val('f-sms-msg') };
-      }
-      if (activeType === 'email') {
-        return { ...base,
-          email:   val('f-email-addr'),
-          subject: val('f-email-subj'),
-          body:    val('f-email-body'),
-        };
-      }
-      if (activeType === 'text') {
-        return { ...base, text: val('f-text') };
-      }
-      if (activeType === 'phone') {
-        return { ...base, phone: val('f-phone-num') };
-      }
+      if (activeType === 'url')   return { ...base, url: val('f-url') };
+      if (activeType === 'wifi')  return { ...base, ssid: val('f-ssid'), password: val('f-password'), security: document.getElementById('f-security').value, hidden: document.getElementById('f-hidden').checked };
+      if (activeType === 'vcard') return { ...base, name: val('f-vcard-name'), phone: val('f-vcard-phone'), email: val('f-vcard-email'), org: val('f-vcard-org'), url: val('f-vcard-url') };
+      if (activeType === 'sms')   return { ...base, phone: val('f-sms-phone'), message: val('f-sms-msg') };
+      if (activeType === 'email') return { ...base, email: val('f-email-addr'), subject: val('f-email-subj'), body: val('f-email-body') };
+      if (activeType === 'text')  return { ...base, text: val('f-text') };
+      if (activeType === 'phone') return { ...base, phone: val('f-phone-num') };
       return base;
     }
 
-    function val(id) {
-      return (document.getElementById(id).value || '').trim();
-    }
+    function val(id) { return (document.getElementById(id).value || '').trim(); }
 
     function hasPrimaryField(p) {
       if (p.type === 'url')   return !!p.url;
@@ -873,14 +1170,17 @@
       const btn   = document.getElementById('btn');
       const box   = document.getElementById('preview-box');
       const qrImg = document.getElementById('qr');
-      const errEl = document.getElementById('error');
       const dlBtn = document.getElementById('download-btn');
       const ph    = document.getElementById('placeholder');
 
-      errEl.style.display = 'none';
+      clearError();
       box.classList.add('loading');
       if (qrImg.src) qrImg.classList.add('loading');
-      if (!isPreview) { btn.disabled = true; btn.textContent = 'Generating…'; }
+      if (!isPreview) {
+        btn.disabled = true;
+        btn.setAttribute('aria-disabled', 'true');
+        btn.textContent = 'Generating…';
+      }
 
       try {
         const res = await fetch(API_URL, {
@@ -901,12 +1201,16 @@
         box.classList.add('has-image');
         dlBtn.href = currentObjectUrl;
         dlBtn.download = FILENAMES[payload.type] || 'qrcode.png';
-        dlBtn.style.display = 'block';
+        dlBtn.style.display = 'flex';
       } catch (e) {
         showError(e.message);
       } finally {
         box.classList.remove('loading');
-        if (!isPreview) { btn.disabled = false; btn.textContent = 'Generate'; }
+        if (!isPreview) {
+          btn.disabled = false;
+          btn.removeAttribute('aria-disabled');
+          btn.textContent = 'Generate';
+        }
       }
     }
 
@@ -918,26 +1222,28 @@
       if (currentObjectUrl) { URL.revokeObjectURL(currentObjectUrl); currentObjectUrl = null; }
       qrImg.src = '';
       qrImg.style.display = 'none';
-      ph.style.display = 'block';
+      ph.style.display = '';
       box.classList.remove('has-image', 'loading');
       dl.style.display = 'none';
     }
 
     function clearError() {
-      document.getElementById('error').style.display = 'none';
+      const el = document.getElementById('error');
+      document.getElementById('error-text').textContent = '';
+      el.style.display = 'none';
     }
 
     function showError(msg) {
       const el = document.getElementById('error');
-      el.textContent = msg;
-      el.style.display = 'block';
+      document.getElementById('error-text').textContent = msg;
+      el.style.display = 'flex';
     }
 
-    // Listen for input/change on all form fields
+    // Delegate input/change events across all form fields
     document.getElementById('form-fields').addEventListener('input', schedulePreview);
     document.getElementById('form-fields').addEventListener('change', schedulePreview);
 
-    // Enter key submits (not in textareas)
+    // Enter key submits from any single-line input
     document.getElementById('form-fields').addEventListener('keydown', e => {
       if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
         clearTimeout(debounceTimer);
